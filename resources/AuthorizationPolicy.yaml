@@ -1,0 +1,147 @@
+# AUTHORIZATION POLICY
+# is a key security feature in Istio that allows you to control access to your services based on who is making the request and what actions they are trying to perform. 
+# It implements fine-grained, role-based access control (RBAC) for service-to-service  and end-user-to-service communication.
+# With AuthorizationPolicies, you can allow or deny traffic based on 
+# - service identities, 
+# - namespaces, 
+# - IP addresses, 
+# - request properties...
+
+# Key Features:
+#   Service-to-Service Access Control: Define policies for internal communication between services within the mesh.
+#   End-User Access Control: Control which end-users can access specific services using JWT tokens or other identity mechanisms.
+#   Flexible Conditions: Authorization decisions can be based on request properties such as paths, methods, headers, and more.
+#   Deny and Allow Rules: Supports both allow and deny actions, providing flexibility in defining access control rules.
+
+_____________________________________________
+
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: my-authorization-policy  # Name of the policy
+  namespace: default             # Namespace where this policy is applied
+spec:
+  selector:
+    matchLabels:
+      app: my-service            # Apply the policy to services with this label (optional)
+
+  action: ALLOW                  # Action to take (ALLOW or DENY)
+  rules:                         # List of rules for the policy
+    - from:                      # Define the source of the request
+        - source:
+            principals:          # List of authenticated identities allowed (e.g., service accounts, JWT claims)
+              - cluster.local/ns/default/sa/my-service-account
+            namespaces:          # Source namespaces allowed to send requests
+              - default
+            ipBlocks:            # Source IP blocks (CIDR ranges)
+              - 192.168.1.0/24
+            requestPrincipals:   # JWT principals (e.g., users)
+              - "user@example.com"
+      to:                        # Define the destination for the request
+        - operation:
+            methods:             # Allowed HTTP methods (e.g., GET, POST, etc.)
+              - GET
+            paths:               # Allowed paths for HTTP requests
+              - /admin/*
+            ports:               # Ports on which the requests are allowed
+              - "8080"
+      when:                      # Additional conditions (optional)
+        - key: request.auth.claims[role]  # Based on JWT claims (e.g., user roles)
+          values:
+            - admin
+
+  action: DENY                   # (Optional) Deny rule for certain traffic
+  rules:
+    - from:
+        - source:
+            ipBlocks:
+              - 10.0.0.0/16      # Deny traffic from this IP range
+
+_____________________________________________
+
+# selector: Specifies which workloads (services) the policy applies to by matching labels on the pods (e.g., app: my-service). If omitted, the policy applies to all workloads in the namespace.
+# action: Defines whether the policy allows or denies access. The action can be either:
+#   ALLOW: Allows the request if it matches the specified rules.
+#   DENY: Denies the request if it matches the specified rules.
+# rules:
+#   from: Specifies the source of the request, which can be defined based on:
+#     principals: List of authenticated identities (e.g., service accounts or JWT claims) that are allowed or denied.
+#     namespaces: Namespaces allowed to send requests.
+#     ipBlocks: Specifies a list of source IP blocks in CIDR notation.
+#     requestPrincipals: JWT principals (usually representing users) for end-user authentication.
+#   to: Defines the destination for the request and its operations:
+#     methods: List of HTTP methods (e.g., GET, POST, etc.) allowed by the policy.
+#     paths: Specifies the allowed paths for the request (e.g., /admin/*).
+#     ports: Restrict the request to specific ports on the destination service.
+#   when: (Optional) Specifies additional conditions, such as JWT claims, request headers, or other request properties. For example, allowing access only to users with a certain role in the JWT.
+# action: DENY: You can also define deny rules to block specific sources or requests from accessing a service. Deny rules take precedence over allow rules.
+
+_____________________________________________
+
+# Example Use Cases:
+#   Restrict Access by JWT Role: You can enforce that only users with an admin role in their JWT claims can access certain paths of a service, such as /admin/*.
+#   Service-to-Service Authorization: Restrict internal service communication to only specific service accounts or namespaces within the mesh, ensuring that only authorized services can access others.
+#   Block Specific IP Ranges: Use the DENY action to block certain IP ranges from accessing services, adding an extra layer of security.
+
+# ALLOW TRAFFIC ONLY FROM SPECIFIC SERVICE ACCOUNT
+# This policy allows traffic only from a specific Kubernetes service account (my-service-account) to the service running with the app: my-service label.
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: service-account-policy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: my-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/default/sa/my-service-account
+
+
+# ALLOW ACCESS TO ADMIN PATHS FOR USERS WITH ADMIN ROLES
+# This policy allows users with an admin role in their JWT claim to access the /admin/* path.
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: admin-role-policy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: my-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            requestPrincipals:
+              - "user@example.com"
+      to:
+        - operation:
+            methods:
+              - GET
+            paths:
+              - /admin/*
+      when:
+        - key: request.auth.claims[role]
+          values:
+            - admin
+
+
+# DENY TRAFFIC FROM SPECIFIC IP RANGE
+This policy blocks all traffic from the IP range 10.0.0.0/16.
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-ip-range
+  namespace: default
+spec:
+  action: DENY
+  rules:
+    - from:
+        - source:
+            ipBlocks:
+              - 10.0.0.0/16
