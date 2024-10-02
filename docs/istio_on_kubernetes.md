@@ -4,7 +4,7 @@
 
 - **Manual Sidecar Injection**: In manual sidecar injection, the Istio **Envoy proxy** sidecar is added to the Kubernetes pod using a command before deploying the application. This is done by modifying the pod's YAML configuration to include the sidecar container specification.
 - **Automatic Sidecar Injection**: Automatic injection happens via Istio’s **admission controller webhook**. When enabled, every pod within a specific namespace (or with certain annotations) automatically gets the Envoy sidecar added to it upon deployment, without manually modifying the pod specification.
-- **Example**: Automatic injection can be enabled by labeling a namespace with `istio-injection=enabled`.
+- **Example**: Automatic injection can be enabled by labeling a namespace with `istio-injection=enabled` or pod with `sidecar.istio.io/inject="true"`
 
 ---
 
