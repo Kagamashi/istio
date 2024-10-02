@@ -17,6 +17,8 @@ In Istio, the component responsible for these tasks is **ISTIOD**.
 - Policy enforcement
 
 Istiod simplifies deployment by consolidating multiple Istio components into one unified control plane.
+Istiod has built-in certificate authority (CA)
+
 
 ---
 
