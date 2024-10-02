@@ -42,7 +42,7 @@ spec:
         - destination:
             host: my-service # Destination service
             subset: v1       # Subset/version of the service to route traffic to
-          weight: 80         # Percentage of traffic (split traffic if using multiple routes)
+          weight: 80         # Percentage of traffic (split traffic if using multiple routes - A/B testing)
         - destination:
             host: my-service
             subset: v2
