@@ -145,3 +145,21 @@ spec:
         - source:
             ipBlocks:
               - 10.0.0.0/16
+
+
+# DENY WORKLOADS IN NAMESPACE BAR TO POST
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: authdenypolicy
+  namespace: bookinfo 
+spec:
+  action: DENY
+  rules:
+    - from:
+        - source:
+          namespace: ["bar"]
+      to:
+        - operation:
+          methods: ["POST"]
+          
