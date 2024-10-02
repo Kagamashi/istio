@@ -113,3 +113,15 @@ spec:
       version: v1
   mtls:
     mode: STRICT
+
+
+# MESH-WIDE POLICY
+# Restricted on istio-system namespace
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: "example-peer-policy"
+  namespace: "istio-sytem" # !!!
+spec:
+  mtls:
+    mode: STRICT 
