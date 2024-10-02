@@ -1,4 +1,5 @@
 Kiali is a comprehensive observability and visualization tool for Istio that helps users:
+https://kiali.io/docs/
 
 - Visualize service dependencies and traffic flows in real time.
 - Monitor metrics, health, and performance of services.
