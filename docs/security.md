@@ -34,3 +34,10 @@ These certificates are used for secure communication and identifying services.
 These policies define **access control** (e.g., RBAC), **traffic control** (e.g., rate limiting), and other operational rules (e.g., retries, timeouts). 
 This ensures that only authorized services and users can access the resources they are entitled to.
 - **Example**: Define policies that enforce specific security rules, like denying access to certain services unless a JWT token is provided.
+
+---
+
+### Security at Depth
+- Every point has security check, not just entry point to the network - this is called **security at depth**
+- Sidecar and Ingress/Exgress proxies work as Policy Enforcement Points
+  
