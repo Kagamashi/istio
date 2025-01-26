@@ -171,21 +171,3 @@
   istioctl x authz check <pod-name> --namespace <namespace>
   istioctl x authz list --workload <workload-name> --namespace <namespace>
   ```
-
----
-
-## Observability Dashboards
-
-### Launch Dashboards
-- **Description:** Launches the dashboard for various observability tools integrated with Istio, such as Kiali, Grafana, Prometheus, and Jaeger.
-- **Commands:**
-  ```bash
-  istioctl dashboard kiali
-  istioctl dashboard grafana
-  istioctl dashboard jaeger
-  ```
-
----
-
-This guide provides an organized overview of `istioctl` commands to help you manage and troubleshoot Istio efficiently.
-
