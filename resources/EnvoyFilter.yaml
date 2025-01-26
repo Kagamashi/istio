@@ -1,4 +1,5 @@
-# EnvoyFilter 
+# EnvoyFilter
+
 # Advanced Istio resource that allows customizing the behavior of the Envoy proxies running as sidecars within service mesh. 
 # This is especially useful for advanced use cases which the standard Istio traffic management features may not cover.
 
