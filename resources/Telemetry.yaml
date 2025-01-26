@@ -1,7 +1,6 @@
-# TELEMETRY 
-# in Istio is a flexible configuration resource that allows you to define how metrics, logging, and tracing are generated and collected for workloads within a service mesh.
-# It offers fine-grained control over how telemetry data is produced, providing the ability to tailor observability at multiple levels: 
-# mesh-wide, namespace-wide, or for specific workloads.
+# Telemetry
+
+# Configuration resource that allows you to define how metrics, logging, and tracing are generated and collected for workloads within a service mesh.
 
 # Hierarchy of Configuration:
 #   Workload-specific: Configuration applies to specific workloads selected via labels.
@@ -60,8 +59,6 @@ spec:
 # tracing: Configuration for tracing, including trace providers (e.g., Jaeger), sampling rate, and custom tags.
 
 ---
-
-### Usage example:
 
 # SAMPLING 10% TRAFFIC FOR TRACING 
 # This example configures the mesh to trace 10% of traffic for all workloads in the istio-system namespace.
