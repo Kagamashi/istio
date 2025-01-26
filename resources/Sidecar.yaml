@@ -8,7 +8,7 @@
 #   Outbound Traffic Control: Define which services or external destinations the sidecar proxy can communicate with.
 #   Ingress and Egress Traffic: Manage ingress (inbound) and egress (outbound) traffic for a specific pod, enabling fine-grained control over network policies.
 
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1beta1
 kind: Sidecar
@@ -39,7 +39,7 @@ spec:
   outboundTrafficPolicy:          # Control outbound traffic policy (ALLOW_ANY or REGISTRY_ONLY)
     mode: ALLOW_ANY               # Allow traffic to any external service by default
 
-_____________________________________________
+---
 
 # workloadSelector: Specifies the workloads (pods) to which this Sidecar configuration applies. You define it by matching labels on pods (e.g., app: my-service). If not specified, the configuration applies to all pods in the namespace.
 # ingress: Controls how inbound traffic is handled by the Envoy proxy. You can define which ports the sidecar listens on and how the traffic should be forwarded to the application.
@@ -51,7 +51,7 @@ _____________________________________________
 #   ALLOW_ANY: Allows the service to communicate with any external service, even if it is not explicitly listed.
 #   REGISTRY_ONLY: Limits outbound traffic to services that are explicitly defined in the service registry (i.e., internal services or those registered via ServiceEntry).
 
-_____________________________________________
+---
 
 ### Usage example:
 
@@ -73,6 +73,7 @@ spec:
   outboundTrafficPolicy:
     mode: REGISTRY_ONLY    # Disallow traffic to any external service unless explicitly defined
 
+---
 
 # ALLOW OUTBOUND TRAFFIC TO EXTERNAL SERVICE 
 # This configuration allows outbound traffic to both internal services in the default namespace 
@@ -96,6 +97,7 @@ spec:
   outboundTrafficPolicy:
     mode: ALLOW_ANY              # Allow traffic to any external service
 
+---
 
 # ISOLATE A SERVICE FROM THE REST OF THE MESH 
 # This configuration isolates a service, restricting it to communicate only with itself. 
