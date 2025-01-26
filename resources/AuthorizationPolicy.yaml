@@ -13,7 +13,7 @@
 #   Flexible Conditions: Authorization decisions can be based on request properties such as paths, methods, headers, and more.
 #   Deny and Allow Rules: Supports both allow and deny actions, providing flexibility in defining access control rules.
 
-_____________________________________________
+# ---
 
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -50,14 +50,14 @@ spec:
           values:
             - admin
 
-  action: DENY                   # (Optional) Deny rule for certain traffic
-  rules:
-    - from:
-        - source:
-            ipBlocks:
-              - 10.0.0.0/16      # Deny traffic from this IP range
+  # action: DENY                   # (Optional) Deny rule for certain traffic
+  # rules:
+  #   - from:
+  #       - source:
+  #           ipBlocks:
+  #             - 10.0.0.0/16      # Deny traffic from this IP range
 
-_____________________________________________
+---
 
 # selector: Specifies which workloads (services) the policy applies to by matching labels on the pods (e.g., app: my-service). If omitted, the policy applies to all workloads in the namespace.
 # action: Defines whether the policy allows or denies access. The action can be either:
@@ -76,7 +76,7 @@ _____________________________________________
 #   when: (Optional) Specifies additional conditions, such as JWT claims, request headers, or other request properties. For example, allowing access only to users with a certain role in the JWT.
 # action: DENY: You can also define deny rules to block specific sources or requests from accessing a service. Deny rules take precedence over allow rules.
 
-_____________________________________________
+---
 
 # Example Use Cases:
 #   Restrict Access by JWT Role: You can enforce that only users with an admin role in their JWT claims can access certain paths of a service, such as /admin/*.
@@ -101,6 +101,7 @@ spec:
             principals:
               - cluster.local/ns/default/sa/my-service-account
 
+---
 
 # ALLOW ACCESS TO ADMIN PATHS FOR USERS WITH ADMIN ROLES
 # This policy allows users with an admin role in their JWT claim to access the /admin/* path.
@@ -130,9 +131,10 @@ spec:
           values:
             - admin
 
+---
 
 # DENY TRAFFIC FROM SPECIFIC IP RANGE
-This policy blocks all traffic from the IP range 10.0.0.0/16.
+# This policy blocks all traffic from the IP range 10.0.0.0/16.
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -146,6 +148,7 @@ spec:
             ipBlocks:
               - 10.0.0.0/16
 
+---
 
 # DENY WORKLOADS IN NAMESPACE BAR TO POST
 apiVersion: security.istio.io/v1beta1
