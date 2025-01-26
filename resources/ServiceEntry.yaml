@@ -1,9 +1,8 @@
 # ServiceEntry
-# is a configuration resource in Istio used to add entries to Istio's internal service registry, 
-# enabling the service mesh to understand and manage external services or services outside the mesh. 
-# By default, Istio manages only the services that are part of the mesh. 
+
 # When you need to access services outside the mesh (e.g., external APIs or legacy services), 
 # you use a ServiceEntry to register these services, enabling control over their traffic, security, and policies like any internal service.
+# By default, Istio manages only the services that are part of the mesh. 
 
 # Key Features:
 #   External Services: Allows communication with services outside the service mesh (e.g., public APIs, databases).
@@ -16,35 +15,27 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: external-api-entry   # Name of the ServiceEntry
+  name: external-api-entry
   namespace: default         # Namespace where this entry applies
 spec:
   hosts:                     # The DNS name(s) of the service
     - api.external.com       # Hostname of the external service (can be FQDN or wildcard)
-
-  location: MESH_EXTERNAL     # Service is external to the mesh (MESH_INTERNAL for internal services)
-
+  location: MESH_EXTERNAL    # Service is external to the mesh (MESH_INTERNAL for internal services)
   ports:                      # Define the ports for the service
     - number: 80              # Port number for HTTP traffic
       name: http              # Name of the port (must be unique within the service entry)
       protocol: HTTP          # Protocol used by the service (e.g., HTTP, HTTPS, TCP)
-
-  resolution: DNS             # How the service's IP addresses are resolved (DNS or STATIC)
-  
+  resolution: DNS             # How the service's IP addresses are resolved (DNS || STATIC)
   endpoints:                  # Optional list of endpoints for the service (when resolution is STATIC)
     - address: 192.168.1.10   # IP address of the endpoint
       ports:
         http: 80              # Map port names to actual numbers
-
   addresses:                  # Optional list of IP ranges associated with the service
     - 192.168.1.0/24          # Define the CIDR range for the service if applicable
-  
   exportTo:                   # Optional: control visibility of the service entry to other namespaces
     - "*"                     # "*" means the service is visible to all namespaces
-  
   subjectAltNames:            # Optional: list of SANs to authenticate the service using mTLS
-    - "spiffe://api.external.com"
-    
+    - "spiffe://api.external.com"  
   trafficPolicy:               # Optional: configure traffic policies for the external service
     loadBalancer:
       simple: ROUND_ROBIN      # Load balancing strategy (e.g., ROUND_ROBIN, LEAST_CONN)
@@ -65,15 +56,11 @@ spec:
 # exportTo: (Optional) Controls whether this ServiceEntry is exported to other namespaces. By default, it is only visible in its own namespace, but you can make it available to other namespaces by setting exportTo: "*".
 # subjectAltNames: (Optional) List of Subject Alternative Names (SANs) for mTLS authentication. This is useful when you want to authenticate external services using their certificates in mTLS communication.
 # trafficPolicy: (Optional) Defines traffic policies for the service, such as load balancing strategies or TLS settings. This allows you to control how traffic to the external service is handled.
-# Example traffic policies include load balancing and TLS configuration, similar to how traffic policies are applied to internal services using DestinationRules.
 
 ---
 
-### USAGE EXAMPLES:
-
 # REGISTER AN EXTERNAL HTTP API 
-# This ServiceEntry defines an external service (e.g., a third-party API at api.external.com)
-# that can be accessed via the mesh over HTTP.
+# This ServiceEntry defines an external service (e.g., a third-party API at api.external.com) that can be accessed via the mesh over HTTP.
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
