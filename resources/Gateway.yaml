@@ -22,7 +22,7 @@
 #   Ingress Gateway: Manages inbound traffic from external sources to services within the mesh.
 #   Egress Gateway: Controls outbound traffic from the mesh to external services, applying security policies like mTLS and traffic routing.
 
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
@@ -49,7 +49,7 @@ spec:
       hosts:
         - "secure.mydomain.com"  # Match traffic for this host
 
-_____________________________________________
+---
 
 # selector: Specifies the workload (typically the Istio ingress/egress gateway pod) where the Gateway should be applied. It allows Istio to associate the Gateway resource with the actual Gateway service running in the mesh (e.g., ingressgateway).
 # servers: Defines servers that handle incoming or outgoing traffic. Each server configuration includes the following:
@@ -62,7 +62,7 @@ _____________________________________________
 #   PASSTHROUGH: Istio forwards TLS connections without terminating them, allowing the destination service to handle TLS.
 #   credentialName: refers to a Kubernetes secret containing the TLS certificate and private key.
 
-_____________________________________________
+---
 
 # To route traffic from Gateway to internal services we must associate Gateway with a VirtualService.
 # VirtualService defines how Gateway should route traffic to services within the mesh. 
@@ -107,7 +107,7 @@ spec:
             port:
               number: 8080   # Route traffic to port 8080 of the internal service
 
-_____________________________________________
+---
 
 # EGRESS GATEWAY
 # controls outbound traffic from the service mesh, ensuring that Istio’s policies are applied to traffic leaving the mesh. 
