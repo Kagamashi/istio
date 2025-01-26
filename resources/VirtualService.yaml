@@ -1,10 +1,10 @@
-# VIRTUAL SERVICE are a key component of traffic management in Istio. 
-# They define rules that control how requests are routed to services within the mesh. 
-# With Virtual Services, you can configure various traffic control features such as request routing, 
-# load balancing, fault injection, retries, and timeouts.
+# VirtualService
+
+# Central feature of Istio’s traffic management capabilities, 
+# Enables fine-grained control over how traffic flows between services in a microservices architecture.
 
 # Key features:
-#   Routing: Virtual Services allow you to define how traffic is routed to different service versions or subsets based on criteria like headers, URLs, or weight.
+#   Routing: Virtual Services allow defining how traffic is routed to different service versions or subsets based on criteria like headers, URLs, or weight.
 #   Traffic Splitting: Supports splitting traffic between different versions of a service, enabling canary releases or A/B testing.
 #   Fault Injection: Introduce delays or failures to simulate network problems for testing the resilience of services.
 #   Retries and Timeouts: Configure how Istio should handle retries and timeouts for failed or slow requests.
@@ -14,27 +14,24 @@
 #   Canary deployments: Split traffic between a stable and a new version of a service.
 #   Blue/green deployments: Route traffic entirely to one version while keeping another ready.
 #   A/B testing: Route traffic based on headers, allowing for testing different service behaviors.
-#   Fault tolerance: Inject delays or simulate failures to test the resilience of your services.
-# This flexibility makes Virtual Services a central feature of Istio’s traffic management capabilities, 
-# enabling fine-grained control over how traffic flows between services in a microservices architecture.
 
 ---
 
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: my-virtual-service # Name of the VirtualService
+  name: my-virtual-service
   namespace: default       # Namespace where this VirtualService applies
 spec:
   hosts:
-    - my-service           # Hostname of the service (FQDN or short name)
+    - my-service            # Hostname of the service (FQDN or short name)
   gateways:                 # Gateways to associate with this VirtualService (optional)
     - my-gateway            # If not defined, the VirtualService will apply to mesh-internal traffic
   http:                     # HTTP traffic routing rules
     - name: primary-route   # Optional name for the route rule
       match:                # Optional matching conditions for the route
         - uri:              # Match based on URI
-            exact: /foo     # Exact path match (other options: "prefix", "regex")
+            exact: /foo     # Exact path match (other options: "prefix" || "regex")
           headers:          # Match based on request headers (optional)
             my-header:
               exact: value
@@ -49,7 +46,7 @@ spec:
           weight: 20
       timeout: 5s            # Timeout for requests to the service
       retries:               # Configure retries for failed requests
-        attempts: 3          # Number of retry attempts
+        attempts: 3
         perTryTimeout: 2s    # Timeout per retry
         retryOn: gateway-error,connect-failure # Retry on specific conditions
       fault:                 # Fault injection for testing failures
