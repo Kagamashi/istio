@@ -1,18 +1,17 @@
-SERVICE ENTRY
-is a configuration resource in Istio used to add entries to Istio's internal service registry, 
-enabling the service mesh to understand and manage external services or services outside the mesh. 
-By default, Istio manages only the services that are part of the mesh. 
-When you need to access services outside the mesh (e.g., external APIs or legacy services), 
-you use a ServiceEntry to register these services, enabling control over their traffic, security, and policies like any internal service.
+# SERVICE ENTRY
+# is a configuration resource in Istio used to add entries to Istio's internal service registry, 
+# enabling the service mesh to understand and manage external services or services outside the mesh. 
+# By default, Istio manages only the services that are part of the mesh. 
+# When you need to access services outside the mesh (e.g., external APIs or legacy services), 
+# you use a ServiceEntry to register these services, enabling control over their traffic, security, and policies like any internal service.
 
-Key Features:
-  External Services: Allows communication with services outside the service mesh (e.g., public APIs, databases).
-  Internal Services: Defines services inside the mesh that might not be discoverable automatically (e.g., services running on VMs).
-  Traffic Control: Apply the same Istio traffic management, security, and observability policies to external services as you would for internal services.
-  Service Discovery: Makes external services discoverable and manageable by Istio's service discovery mechanisms.
+# Key Features:
+#   External Services: Allows communication with services outside the service mesh (e.g., public APIs, databases).
+#   Internal Services: Defines services inside the mesh that might not be discoverable automatically (e.g., services running on VMs).
+#   Traffic Control: Apply the same Istio traffic management, security, and observability policies to external services as you would for internal services.
+#   Service Discovery: Makes external services discoverable and manageable by Istio's service discovery mechanisms.
 
-
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
@@ -45,16 +44,14 @@ spec:
   
   subjectAltNames:            # Optional: list of SANs to authenticate the service using mTLS
     - "spiffe://api.external.com"
-  
-  location: MESH_EXTERNAL      # Specify that the service is outside the mesh
-  
+    
   trafficPolicy:               # Optional: configure traffic policies for the external service
     loadBalancer:
       simple: ROUND_ROBIN      # Load balancing strategy (e.g., ROUND_ROBIN, LEAST_CONN)
     tls:
       mode: SIMPLE             # Configure TLS settings for the service (DISABLE, SIMPLE, ISTIO_MUTUAL)
 
-_____________________________________________
+---
 
 # hosts: The hostname(s) for the service being defined. For external services, this will typically be the FQDN of the external API or service (e.g., api.external.com).
 # location: Specifies whether the service is internal (MESH_INTERNAL) or external (MESH_EXTERNAL) to the mesh.
@@ -70,7 +67,7 @@ _____________________________________________
 # trafficPolicy: (Optional) Defines traffic policies for the service, such as load balancing strategies or TLS settings. This allows you to control how traffic to the external service is handled.
 # Example traffic policies include load balancing and TLS configuration, similar to how traffic policies are applied to internal services using DestinationRules.
 
-_____________________________________________
+---
 
 ### USAGE EXAMPLES:
 
@@ -92,6 +89,7 @@ spec:
       protocol: HTTP
   resolution: DNS
 
+---
 
 # REGISTER STATIC IP DATABASE SERVICE 
 # This ServiceEntry registers a database running at a static IP (192.168.1.10) on port 5432. 
@@ -115,6 +113,7 @@ spec:
       ports:
         tcp: 5432
 
+---
 
 # APPLY TRAFFIC POLICIES TO EXTERNAL SERVICES 
 # This ServiceEntry defines an external service with a load balancing policy and TLS settings. 
