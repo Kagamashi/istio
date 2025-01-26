@@ -12,7 +12,7 @@
 #   Security: Istio’s mTLS and other security features can be extended to non-Kubernetes workloads, ensuring secure communication.
 #   Observability: Metrics, logs, and traces can be collected from external workloads as if they were native Kubernetes services.
 
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1beta1
 kind: WorkloadEntry
@@ -32,7 +32,7 @@ spec:
   serviceAccount: my-service-account # (Optional) Define the service account for the workload
   weight: 100                       # (Optional) Weight to be used for load balancing across multiple WorkloadEntries
 
-_____________________________________________
+---
 
 address: The IP address of the external workload (e.g., a VM or a bare-metal server). This allows Istio to communicate with this external resource as if it were part of the Kubernetes service mesh.
 ports: Specifies the ports on which the external workload is listening. You can define multiple named ports (e.g., http, grpc), similar to how Kubernetes services define ports for communication.
@@ -42,7 +42,7 @@ locality: (Optional) Defines the locality (e.g., region/zone/subzone) of the wor
 serviceAccount: (Optional) The service account associated with the external workload. This enables the workload to use mTLS and integrate with Istio’s security features, such as identity-based access control.
 weight: (Optional) Defines the weight to be used for load balancing. If multiple WorkloadEntries represent instances of the same service, the weight allows you to control how traffic is distributed between them.
 
-_____________________________________________
+---
 
 ### Usage exmple:
 
@@ -61,6 +61,7 @@ spec:
     app: my-service
     version: v1
 
+---
 
 # INTEGRATE EXTERNAL WORKLOADS ACROSS DIFFERENT NETWORKS 
 # This configuration integrates an external workload that resides on a different network (network-1) and uses locality-based load balancing.
@@ -80,6 +81,7 @@ spec:
   locality: us-west/zone1/subzone1  # Define the locality for load balancing
   serviceAccount: external-sa       # Associate with a service account for mTLS
 
+---
 
 # USE MULTIPLE WORKLOADENTRIES FOR LOAD BALANCING
 # This example creates two WorkloadEntry resources, each representing a different instance of an external service, and sets the weights for load balancing.
@@ -112,7 +114,7 @@ spec:
     version: v1
   weight: 20  # 20% of the traffic will go to this instance
 
-_____________________________________________
+---
 
 # To fully integrate external services into the mesh we often combine WorkloadEntry with ServiceEntry.
 # ServiceEntry defines the external service itself 
