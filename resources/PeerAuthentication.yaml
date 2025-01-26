@@ -1,7 +1,6 @@
-# PEER AUTHENTICATION
-# is a security policy in Istio that defines the mutual TLS (mTLS) settings for service-to-service communication within the mesh. 
+# PeerAuthentication
+# Security policy that defines the mutual TLS (mTLS) settings for service-to-service communication within the mesh. 
 # It controls whether mTLS is enabled and how it is enforced between services. 
-# With PeerAuthentication, you can enable, disable, or make mTLS permissive, allowing secure communication between services without modifying application code.
 
 # Key Features:
 #   Mutual TLS (mTLS): Controls whether mTLS is enforced between services in the mesh. This ensures that services authenticate each other and encrypt traffic between them.
@@ -24,15 +23,12 @@ spec:
   selector:                   # Apply the policy to specific workloads (optional)
     matchLabels:
       app: my-service          # Apply only to workloads with this label
-
-  mtls:                       # mTLS configuration
+  mtls:                        # mTLS configuration
     mode: STRICT               # Mode for mTLS (STRICT, PERMISSIVE, DISABLE)
-
   # Optional: Configure how traffic between services is handled based on origin
   portLevelMtls:               # mTLS settings specific to certain ports
     8080:                      # Apply to port 8080
       mode: DISABLE            # Disable mTLS for port 8080
-
   # Optional: Configure policies for how peer authentication applies to workloads or namespaces
   policy:
     workloadSelector:          # Select specific workloads (optional)
@@ -54,8 +50,7 @@ spec:
 ### Example usage:
 
 # ENABLE STRICT mTLS FOR ALL SERVICES IN NAMESPACE
-# This policy enables strict mTLS for all services in the default namespace, 
-# ensuring that all communication between services is encrypted and authenticated.
+# This policy enables strict mTLS for all services in the default namespace, ensuring that all communication between services is encrypted and authenticated.
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
@@ -68,8 +63,7 @@ spec:
 ---
 
 # ALLOW BOTH mTLS AND PLAIN TEXT (PERMISSIVE MODE)
-# This policy configures permissive mTLS for services labeled with app: 
-# my-service, allowing both mTLS and plaintext traffic.
+# This policy configures permissive mTLS for services labeled with app: my-service, allowing both mTLS and plaintext traffic.
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
@@ -85,8 +79,7 @@ spec:
 ---
 
 # DISABLE mTLS FOR A SPECIFIC PORT
-# This policy disables mTLS for port 8080 of the service labeled app: 
-# my-service, while keeping mTLS enabled for other ports.
+# This policy disables mTLS for port 8080 of the service labeled app: my-service, while keeping mTLS enabled for other ports.
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
