@@ -1,7 +1,6 @@
-# DESTINATION RULES
-# are used to configure policies for the traffic intended for a service after routing has been applied by a VirtualService. 
-# These policies include features such as load balancing, connection pooling, circuit breaking, 
-# and outlier detection, and they are applied to the traffic routed to a particular destination.
+# DestinationRule
+
+# Used to configure policies for the traffic intended for a service after routing has been applied by a VirtualService. 
 
 # Key Features:
 #   Load Balancing: Control how requests are distributed across service instances (e.g., round-robin, least connections).
@@ -9,7 +8,6 @@
 #   Circuit Breaking: Prevent a service from being overwhelmed by too many requests.
 #   Outlier Detection: Automatically eject unhealthy instances from the load balancing pool.
 #   Service Subsets: Define subsets of services (e.g., different versions) to apply specific policies.
-
 
 # Usage Example:
 #   Canary Deployments: Define two subsets (v1 and v2) of a service, each with its own traffic policy. A VirtualService can then route traffic to these subsets based on traffic weights or user characteristics.
@@ -21,7 +19,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: my-destination-rule  # Name of the DestinationRule
+  name: my-destination-rule
   namespace: default         # Namespace where the DestinationRule applies
 spec:
   host: my-service           # The FQDN of the service that this rule applies to
@@ -47,7 +45,6 @@ spec:
         maxConnections: 100   # Max connections allowed to this service
         maxPendingRequests: 50 # Max pending requests to this service
         maxRequestsPerConnection: 10 # Max requests per connection
-
   subsets:                   # Define subsets (versions) of the service
     - name: v1               # Name of the subset (used in VirtualServices)
       labels:                # Match subset based on Kubernetes labels
@@ -64,11 +61,9 @@ spec:
       trafficPolicy:
         loadBalancer:
           simple: RANDOM      # Use a different load balancing strategy
-
   exportTo:                   # Control visibility of this rule
     - "."                    # The rule applies only to the current namespace
     - "*"
-
   tls:                        # Apply TLS settings for this service
     mode: ISTIO_MUTUAL        # TLS mode (other options: DISABLE, SIMPLE, MUTUAL)
     clientCertificate: /etc/certs/cert-chain.pem # Client cert for MUTUAL mode
