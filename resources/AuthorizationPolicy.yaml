@@ -13,7 +13,7 @@
 #   - Service-to-Service Authorization: Restrict internal service communication to only specific service accounts or namespaces within the mesh, ensuring that only authorized services can access others.
 #   - Block Specific IP Ranges: Use the DENY action to block certain IP ranges from accessing services, adding an extra layer of security.
 
-# ---
+---
 
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
