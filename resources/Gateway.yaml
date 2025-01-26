@@ -1,10 +1,10 @@
-# GATEWAY 
-# in Istio is a specialized configuration resource that defines how external traffic enters or exits the service mesh. 
-# Gateways allow you to manage ingress (incoming traffic from outside the mesh) and egress (outgoing traffic to external services) for services running inside the mesh. 
+# Gateway
+
+# Configuration resource that defines how external traffic enters or exits the service mesh. 
+# Gateways allows managing ingress (incoming traffic from outside the mesh) and egress (outgoing traffic to external services) for services running inside the mesh. 
 # They act as entry or exit points, ensuring that traffic is controlled, secure, and compliant with policies such as routing, load balancing, and TLS termination.
 
-# Unlike Kubernetes Ingress resources, Istio’s Gateways provide additional flexibility, supporting complex traffic routing 
-# and integrating with Istio’s security, traffic management, and observability features.
+# Unlike Kubernetes Ingress resources, Istio’s Gateways provide additional flexibility, supporting complex traffic routing and integrating with Istio’s security, traffic management, and observability features.
 
 # Key Features:
 #   Ingress Traffic: Defines how external traffic enters the service mesh and is routed to internal services.
@@ -27,16 +27,16 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: my-gateway               # Name of the Gateway resource
+  name: my-gateway
   namespace: istio-system        # Namespace where this gateway is applied
 spec:
   selector:                      # Select the workload (usually an Istio ingress gateway pod) for the Gateway
-    istio: ingressgateway        # Use the "ingressgateway" workload (default in Istio)
+    istio: ingressgateway        # ingressgateway || egressgateway
   servers:                       # Define servers to handle incoming traffic
     - port:
         number: 80               # Port for incoming HTTP traffic
         name: http               # Name of the port
-        protocol: HTTP           # Protocol for incoming traffic
+        protocol: HTTP
       hosts:
         - "mydomain.com"         # Hosts to match traffic for
     - port:
@@ -47,7 +47,7 @@ spec:
         mode: SIMPLE             # TLS termination mode (SIMPLE means Istio terminates the TLS connection)
         credentialName: my-tls-cert  # Refers to the Kubernetes secret containing TLS certs
       hosts:
-        - "secure.mydomain.com"  # Match traffic for this host
+        - "secure.mydomain.com"  # Hosts to match traffic for
 
 ---
 
@@ -70,7 +70,6 @@ spec:
 # In this example:
 # The Gateway handles external HTTP traffic on mydomain.com and forwards it to the VirtualService.
 # The VirtualService defines how the traffic is routed within the mesh, in this case, routing it to my-service on port 8080.
-
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
@@ -96,7 +95,7 @@ spec:
   hosts:
     - "mydomain.com"
   gateways:
-    - my-gateway           # Associate the VirtualService with the Gateway
+    - my-gateway            # Associate the VirtualService with the Gateway
   http:
     - match:
         - uri:
