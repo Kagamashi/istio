@@ -1,5 +1,6 @@
-# WORKLOAD ENTRY 
-# is a resource in Istio that allows you to integrate external workloads (such as virtual machines, bare-metal servers, or other non-Kubernetes resources) into the Istio service mesh. 
+# WorkloadEntry
+
+# Resource in Istio that allows you to integrate external workloads (such as virtual machines, bare-metal servers, or other non-Kubernetes resources) into the Istio service mesh. 
 # It represents a service instance that is not running inside a Kubernetes pod but should still be part of the service mesh for traffic management, security, and observability.
 
 # Using WorkloadEntry, you can treat these external services as part of the mesh, enabling communication with other services 
@@ -17,34 +18,32 @@
 apiVersion: networking.istio.io/v1beta1
 kind: WorkloadEntry
 metadata:
-  name: my-external-workload        # Name of the WorkloadEntry
+  name: my-external-workload
   namespace: default                # Namespace where this resource applies
 spec:
   address: 192.168.1.100            # IP address of the external workload
   ports:                            # Ports exposed by the external workload
     http: 80                        # Name of the port and its corresponding number
     grpc: 8080
-  labels:                           # Labels for selecting the workload for policies
+  labels:
     app: my-service                 # Label to associate the workload with a service
     version: v1
-  network: network-1                # (Optional) Specify the network for multi-cluster/VM scenarios
-  locality: region/zone/subzone     # (Optional) Define the locality for load balancing purposes
+  network: network-1                 # (Optional) Specify the network for multi-cluster/VM scenarios
+  locality: region/zone/subzone      # (Optional) Define the locality for load balancing purposes
   serviceAccount: my-service-account # (Optional) Define the service account for the workload
-  weight: 100                       # (Optional) Weight to be used for load balancing across multiple WorkloadEntries
+  weight: 100                        # (Optional) Weight to be used for load balancing across multiple WorkloadEntries
 
 ---
 
-address: The IP address of the external workload (e.g., a VM or a bare-metal server). This allows Istio to communicate with this external resource as if it were part of the Kubernetes service mesh.
-ports: Specifies the ports on which the external workload is listening. You can define multiple named ports (e.g., http, grpc), similar to how Kubernetes services define ports for communication.
-labels: Labels that are used to associate the external workload with specific services or policies (e.g., traffic routing, destination rules). These labels are essential for service discovery and traffic management.
-network: (Optional) Specifies the network to which the external workload belongs. This is particularly useful in multi-cluster or hybrid environments where workloads might be spread across different networks.
-locality: (Optional) Defines the locality (e.g., region/zone/subzone) of the workload for load balancing purposes. Istio can use this information to route traffic to the closest available instance based on geographical location.
-serviceAccount: (Optional) The service account associated with the external workload. This enables the workload to use mTLS and integrate with Istio’s security features, such as identity-based access control.
-weight: (Optional) Defines the weight to be used for load balancing. If multiple WorkloadEntries represent instances of the same service, the weight allows you to control how traffic is distributed between them.
+# address: The IP address of the external workload (e.g., a VM or a bare-metal server). This allows Istio to communicate with this external resource as if it were part of the Kubernetes service mesh.
+# ports: Specifies the ports on which the external workload is listening. You can define multiple named ports (e.g., http, grpc), similar to how Kubernetes services define ports for communication.
+# labels: Labels that are used to associate the external workload with specific services or policies (e.g., traffic routing, destination rules). These labels are essential for service discovery and traffic management.
+# network: (Optional) Specifies the network to which the external workload belongs. This is particularly useful in multi-cluster or hybrid environments where workloads might be spread across different networks.
+# locality: (Optional) Defines the locality (e.g., region/zone/subzone) of the workload for load balancing purposes. Istio can use this information to route traffic to the closest available instance based on geographical location.
+# serviceAccount: (Optional) The service account associated with the external workload. This enables the workload to use mTLS and integrate with Istio’s security features, such as identity-based access control.
+# weight: (Optional) Defines the weight to be used for load balancing. If multiple WorkloadEntries represent instances of the same service, the weight allows you to control how traffic is distributed between them.
 
 ---
-
-### Usage exmple:
 
 # ADD VIRTUAL MACHINE TO THE MESH
 # This example integrates a VM with IP 192.168.1.100 into the service mesh, associating it with the my-service service, listening on port 80 for HTTP traffic.
@@ -77,7 +76,7 @@ spec:
   labels:
     app: my-service
     version: v2
-  network: network-1               # Specify the network for the workload
+  network: network-1                # Specify the network for the workload
   locality: us-west/zone1/subzone1  # Define the locality for load balancing
   serviceAccount: external-sa       # Associate with a service account for mTLS
 
@@ -98,7 +97,6 @@ spec:
     app: my-service
     version: v1
   weight: 80  # 80% of the traffic will go to this instance
-
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: WorkloadEntry
@@ -113,13 +111,10 @@ spec:
     app: my-service
     version: v1
   weight: 20  # 20% of the traffic will go to this instance
-
 ---
-
 # To fully integrate external services into the mesh we often combine WorkloadEntry with ServiceEntry.
 # ServiceEntry defines the external service itself 
 # WorkloadEntry defines specific instances of the service (VMs or other resources) that belong to that ServiceEntry 
-
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
@@ -134,8 +129,5 @@ spec:
       protocol: HTTP
   resolution: STATIC
   endpoints:
-    - address: 192.168.1.100
+    - address: 192.168.1.100 # IPs of specific instances of the external service
     - address: 192.168.1.101
-
-# ServiceEntry above registers external service external-service.com
-# while WorkloadEntry defines specific instances (IP addresses) that represent this service 
