@@ -38,6 +38,5 @@ This ensures that only authorized services and users can access the resources th
 ---
 
 ### Security at Depth
-- Every point has security check, not just entry point to the network - this is called **security at depth**
-- Sidecar and Ingress/Exgress proxies work as Policy Enforcement Points
-  
+- Every point has a security check, not just the entry point to the network - this is called **security at depth**.
+- Sidecar and Ingress/Egress proxies work as Policy Enforcement Points.
