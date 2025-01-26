@@ -1,31 +1,30 @@
-# AUTHORIZATION POLICY
-# is a key security feature in Istio that allows you to control access to your services based on who is making the request and what actions they are trying to perform. 
-# It implements fine-grained, role-based access control (RBAC) for service-to-service  and end-user-to-service communication.
-# With AuthorizationPolicies, you can allow or deny traffic based on 
-# - service identities, 
-# - namespaces, 
-# - IP addresses, 
-# - request properties...
+# AuthorizationPolicy
 
-# Key Features:
-#   Service-to-Service Access Control: Define policies for internal communication between services within the mesh.
-#   End-User Access Control: Control which end-users can access specific services using JWT tokens or other identity mechanisms.
-#   Flexible Conditions: Authorization decisions can be based on request properties such as paths, methods, headers, and more.
-#   Deny and Allow Rules: Supports both allow and deny actions, providing flexibility in defining access control rules.
+# Key security feature in Istio that allows control access to services based on who is making the request and what actions they are trying to perform. 
+# It implements fine-grained, role-based access control (RBAC) for service-to-service and end-user-to-service communication.
+# With AuthorizationPolicies traffic can be allowd or denied based on:
+#   - service identities, 
+#   - namespaces, 
+#   - IP addresses, 
+#   - request properties...
+
+# Example Use Cases:
+#   - Restrict Access by JWT Role: You can enforce that only users with an admin role in their JWT claims can access certain paths of a service, such as /admin/*.
+#   - Service-to-Service Authorization: Restrict internal service communication to only specific service accounts or namespaces within the mesh, ensuring that only authorized services can access others.
+#   - Block Specific IP Ranges: Use the DENY action to block certain IP ranges from accessing services, adding an extra layer of security.
 
 # ---
 
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: my-authorization-policy  # Name of the policy
+  name: my-authorization-policy
   namespace: default             # Namespace where this policy is applied
 spec:
   selector:
     matchLabels:
       app: my-service            # Apply the policy to services with this label (optional)
-
-  action: ALLOW                  # Action to take (ALLOW or DENY)
+  action: ALLOW                  # Action to take (ALLOW || DENY)
   rules:                         # List of rules for the policy
     - from:                      # Define the source of the request
         - source:
@@ -50,13 +49,6 @@ spec:
           values:
             - admin
 
-  # action: DENY                   # (Optional) Deny rule for certain traffic
-  # rules:
-  #   - from:
-  #       - source:
-  #           ipBlocks:
-  #             - 10.0.0.0/16      # Deny traffic from this IP range
-
 ---
 
 # selector: Specifies which workloads (services) the policy applies to by matching labels on the pods (e.g., app: my-service). If omitted, the policy applies to all workloads in the namespace.
@@ -74,14 +66,8 @@ spec:
 #     paths: Specifies the allowed paths for the request (e.g., /admin/*).
 #     ports: Restrict the request to specific ports on the destination service.
 #   when: (Optional) Specifies additional conditions, such as JWT claims, request headers, or other request properties. For example, allowing access only to users with a certain role in the JWT.
-# action: DENY: You can also define deny rules to block specific sources or requests from accessing a service. Deny rules take precedence over allow rules.
 
 ---
-
-# Example Use Cases:
-#   Restrict Access by JWT Role: You can enforce that only users with an admin role in their JWT claims can access certain paths of a service, such as /admin/*.
-#   Service-to-Service Authorization: Restrict internal service communication to only specific service accounts or namespaces within the mesh, ensuring that only authorized services can access others.
-#   Block Specific IP Ranges: Use the DENY action to block certain IP ranges from accessing services, adding an extra layer of security.
 
 # ALLOW TRAFFIC ONLY FROM SPECIFIC SERVICE ACCOUNT
 # This policy allows traffic only from a specific Kubernetes service account (my-service-account) to the service running with the app: my-service label.
