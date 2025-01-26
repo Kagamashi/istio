@@ -1,4 +1,4 @@
-# SERVICE ENTRY
+# ServiceEntry
 # is a configuration resource in Istio used to add entries to Istio's internal service registry, 
 # enabling the service mesh to understand and manage external services or services outside the mesh. 
 # By default, Istio manages only the services that are part of the mesh. 
