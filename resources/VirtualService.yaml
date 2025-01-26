@@ -18,7 +18,7 @@
 # This flexibility makes Virtual Services a central feature of Istio’s traffic management capabilities, 
 # enabling fine-grained control over how traffic flows between services in a microservices architecture.
 
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -93,7 +93,7 @@ spec:
             port:
               number: 443    # Route traffic to port 443 of the destination
 
-_____________________________________________
+---
 
 # hosts: Specifies the services to which this VirtualService applies. It can be an FQDN, a short name, or * (wildcard).
 # gateways: This field associates the VirtualService with specific Gateways (e.g., for external traffic). If omitted, it applies to internal mesh traffic.
