@@ -16,7 +16,7 @@
 #   Circuit Breaking: Limit the maximum number of concurrent requests and connections to a service to prevent it from being overloaded. If too many errors occur, outlier detection can automatically remove the unhealthy instances.
 #   Load Balancing: Apply different load balancing strategies based on the traffic type or destination subset. For example, you could use ROUND_ROBIN for the main service and LEAST_CONN for a specific subset that handles high-load tasks.
 
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -75,7 +75,7 @@ spec:
     privateKey: /etc/certs/key.pem               # Private key for MUTUAL mode
     caCertificates: /etc/certs/root-cert.pem     # CA certificates for MUTUAL mode
 
-_____________________________________________
+---
 
 # host: Specifies the service to which this DestinationRule applies, using the fully qualified domain name (FQDN) or the short service name within the namespace.
 # trafficPolicy: Configures global traffic policies for the service, such as load balancing, connection pooling, circuit breaking, and outlier detection.
