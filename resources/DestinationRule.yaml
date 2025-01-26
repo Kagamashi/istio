@@ -5,8 +5,8 @@
 # Key Features:
 #   Load Balancing: Control how requests are distributed across service instances (e.g., round-robin, least connections).
 #   Connection Pooling: Manage how many requests can be sent to a service at the same time.
-#   Circuit Breaking: Prevent a service from being overwhelmed by too many requests.
 #   Outlier Detection: Automatically eject unhealthy instances from the load balancing pool.
+#   Circuit Breaking: Prevent a service from being overwhelmed by too many requests.
 #   Service Subsets: Define subsets of services (e.g., different versions) to apply specific policies.
 
 # Usage Example:
@@ -24,16 +24,16 @@ metadata:
 spec:
   host: my-service           # The FQDN of the service that this rule applies to
   trafficPolicy:             # Define traffic policies for all subsets and services
-    loadBalancer:            # Load balancing strategy for the service
-      simple: ROUND_ROBIN    # Load balancing mode (other options: LEAST_CONN, RANDOM, PASSTHROUGH)
-      consistentHash:        # Option for hashing load balancing (optional)
+    loadBalancer:            
+      simple: ROUND_ROBIN    # Load balancing mode (ROUND_ROBIN || LEAST_CONN || RANDOM || PASSTHROUGH)
+      consistentHash:        
         httpHeaderName: user-id  # Hash requests based on a specific HTTP header (e.g., user ID)
-    connectionPool:          # Connection pool settings
+    connectionPool:
       http:                  # HTTP connection pooling settings
         http1MaxPendingRequests: 100 # Max number of pending HTTP/1.1 requests
-        maxRequestsPerConnection: 10 # Max requests per connection
+        maxRequestsPerConnection: 10
       tcp:                   # TCP connection pooling settings
-        maxConnections: 1000  # Max number of TCP connections
+        maxConnections: 1000
         connectTimeout: 30ms  # Timeout for establishing new TCP connections
     outlierDetection:        # Detect and reject unhealthy service instances
       consecutiveErrors: 5    # Number of consecutive errors before ejection
@@ -42,16 +42,16 @@ spec:
       maxEjectionPercent: 50  # Max percentage of instances that can be ejected
     circuitBreaker:           # Configure circuit breaking for the service
       http:
-        maxConnections: 100   # Max connections allowed to this service
-        maxPendingRequests: 50 # Max pending requests to this service
-        maxRequestsPerConnection: 10 # Max requests per connection
+        maxConnections: 100
+        maxPendingRequests: 50
+        maxRequestsPerConnection: 10
   subsets:                   # Define subsets (versions) of the service
     - name: v1               # Name of the subset (used in VirtualServices)
       labels:                # Match subset based on Kubernetes labels
         version: v1          # Match the "v1" version of the service
-      trafficPolicy:          # Traffic policy for this subset
+      trafficPolicy:         # Traffic policy for this subset
         loadBalancer:
-          simple: LEAST_CONN  # Different load balancer setting for this subset
+          simple: LEAST_CONN # Different load balancer setting for this subset
         connectionPool:
           tcp:
             maxConnections: 200 # Specific connection pool settings for this subset
@@ -62,10 +62,10 @@ spec:
         loadBalancer:
           simple: RANDOM      # Use a different load balancing strategy
   exportTo:                   # Control visibility of this rule
-    - "."                    # The rule applies only to the current namespace
+    - "."                     # The rule applies only to the current namespace
     - "*"
   tls:                        # Apply TLS settings for this service
-    mode: ISTIO_MUTUAL        # TLS mode (other options: DISABLE, SIMPLE, MUTUAL)
+    mode: ISTIO_MUTUAL        # TLS mode (other options: DISABLE || SIMPLE || MUTUAL)
     clientCertificate: /etc/certs/cert-chain.pem # Client cert for MUTUAL mode
     privateKey: /etc/certs/key.pem               # Private key for MUTUAL mode
     caCertificates: /etc/certs/root-cert.pem     # CA certificates for MUTUAL mode
