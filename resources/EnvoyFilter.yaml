@@ -10,7 +10,7 @@
 #   Extensibility: Allows you to integrate custom logic or external services by modifying the Envoy configuration.
 #   Per-Service or Global Scope: You can apply EnvoyFilters globally across the mesh or target specific workloads/services.
 
-_____________________________________________
+---
 
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -53,7 +53,7 @@ spec:
             "@type": type.googleapis.com/envoy.extensions.filters.network.mysql_proxy.v3.MySQLProxy
             stat_prefix: mysql
 
-_____________________________________________
+---
 
 # workloadSelector: Specifies which workloads the filter applies to by matching the labels on the pods (e.g., app: my-service). If omitted, the filter applies to all workloads in the namespace.
 # configPatches: This section defines the patches to be applied to Envoy’s configuration. Each patch includes:
@@ -70,7 +70,7 @@ _____________________________________________
 # priority: (Optional) Specifies the priority of this filter relative to other Envoy filters. Filters with higher priority numbers are applied later.
 # exportTo: (Optional) Controls whether the filter is visible only in the current namespace (".") or shared across namespaces ("*") in the mesh.
 
-_____________________________________________
+---
 
 # Add Custom Headers: Use Lua filters to inject custom headers or modify requests/responses.
 # Traffic Manipulation: Modify traffic behavior or manipulate request/response payloads using WebAssembly (WASM) or Lua.
@@ -108,6 +108,7 @@ spec:
                 request_handle:headers():add("x-custom-header", "my-value")
               end
 
+---
 
 # MYSQL PROXY FOR OUTBOUND TRAFFIC
 # This EnvoyFilter adds a MySQL proxy filter to outbound traffic on port 3306, which logs MySQL queries and responses.
@@ -134,6 +135,7 @@ spec:
             stat_prefix: outbound_mysql
             access_log: /dev/stdout
 
+---
 
 # REMOVE A FILTER
 # This EnvoyFilter removes an existing HTTP filter (envoy.filters.http.cors) from inbound traffic.
