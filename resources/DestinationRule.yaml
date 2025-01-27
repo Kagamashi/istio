@@ -40,11 +40,6 @@ spec:
       interval: 10s           # Time window to check for errors
       baseEjectionTime: 30s   # How long the instance is ejected
       maxEjectionPercent: 50  # Max percentage of instances that can be ejected
-    circuitBreaker:           # Configure circuit breaking for the service
-      http:
-        maxConnections: 100
-        maxPendingRequests: 50
-        maxRequestsPerConnection: 10
   subsets:                   # Define subsets (versions) of the service
     - name: v1               # Name of the subset (used in VirtualServices)
       labels:                # Match subset based on Kubernetes labels
@@ -77,7 +72,6 @@ spec:
 # loadBalancer: Defines the load balancing strategy for distributing traffic among service instances. Options include ROUND_ROBIN, LEAST_CONN, RANDOM, and PASSTHROUGH (direct communication).
 # connectionPool: Configures how connections are managed for both HTTP and TCP traffic, including the maximum number of connections, requests per connection, and connection timeouts.
 # outlierDetection: Detects and ejects unhealthy service instances that consistently fail or return errors. Configurable thresholds determine when instances are considered unhealthy.
-# circuitBreaker: Sets circuit breaking rules to limit the number of requests or connections to a service, preventing it from being overwhelmed.
 # subsets: Defines subsets (e.g., versions) of the service using Kubernetes labels. You can apply different traffic policies (e.g., load balancing or circuit breaking) to each subset, enabling scenarios like canary deployments or A/B testing.
 # exportTo: Controls the visibility of this DestinationRule across namespaces. By default, DestinationRules are scoped to the namespace where they are created, but you can allow or restrict access to other namespaces or clusters.
 # tls: Configures TLS settings for the service. TLS can be enabled with ISTIO_MUTUAL mode (automatic mTLS between services), or MUTUAL mode with manually specified certificates for client authentication.
