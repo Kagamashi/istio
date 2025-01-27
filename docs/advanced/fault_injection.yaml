@@ -1,5 +1,6 @@
 # FAULT INJECTION
-# is a feature in Istio that allows to simulate failures within the service mesh to test the resilience of services.
+
+# Feature in Istio that allows to simulate failures within the service mesh to test the resilience of services.
 # By deliberately introducing faults like delays or errors, you can observe how your system behaves under adverse conditions and ensure that your applications can tolerate failures gracefully.
 
 # - Delays: Introduce artificial delays to simulate network latency.
@@ -24,6 +25,7 @@ spec:
             subset: v1
 
 ---
+
 # Simulating an ERROR
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
