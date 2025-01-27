@@ -26,21 +26,9 @@
 
 ---
 
-## Ingress/Egress
-
-### Ingress
-- **Role**: Ingress allows external traffic to enter the service mesh. Istio uses **IngressGateways** to expose services to the outside world. It can handle secure (HTTPS) and load-balanced traffic.
-- **Example**: An external user accesses a service within the mesh via an IngressGateway.
-
-### Egress
-- **Role**: Egress manages traffic leaving the service mesh, often used to control access to external services (e.g., third-party APIs). **EgressGateways** ensure traffic to external resources is managed securely and with policy enforcement.
-- **Example**: Limiting outgoing traffic to only approved external services through an EgressGateway.
-
----
-
 ## Load Balancing
 
-- **Role**: Istio automatically provides **load balancing** between instances of a service. The load balancing strategies supported include:
+- **Role**: Istio automatically provides **load balancing** between instances of a service:
   - **Round Robin**: Distributes traffic equally among service instances.
   - **Random**: Sends requests to random instances.
   - **Least Connection**: Routes traffic to the instance with the fewest active connections.
