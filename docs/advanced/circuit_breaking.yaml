@@ -14,7 +14,7 @@ metadata:
 spec:
   host: my-service
   trafficPolicy:
-    outlierDetection:
+    outlierDetection: # circuit_breaking
       consecutiveErrors: 5   # Number of consecutive errors to trip the circuit
       interval: 10s          # Time window for checking errors
       baseEjectionTime: 30s  # Time a service instance is ejected after failing
