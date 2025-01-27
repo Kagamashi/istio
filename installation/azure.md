@@ -1,38 +1,80 @@
-ISTIO-based SERVICE MESH ADD-ON
+# Installing Istio Add-On in Azure
 
-Difference between add-on and open-source Istio
-  • Istio versions are tested and verified to be compatible with supported versions of Azure Kubernetes Service.
-  • Microsoft handles scaling and configuration of Istio control plane
-  • Microsoft adjusts scaling of AKS components like coredns when Istio is enabled.
-  • Microsoft provides managed lifecycle (upgrades) for Istio components when triggered by user.
-  • Verified external and internal ingress set-up.
-  • Verified to work with Azure Monitor managed service for Prometheus and Azure Managed Grafana.
-  • Official Azure support provided for the add-on.
+This guide outlines how to install the Istio-based service mesh add-on for Azure Kubernetes Service (AKS).
 
-Limitations:
-  • The add-on doesn't work on AKS clusters that are using Open Service Mesh addon for AKS.
-  • The add-on doesn't work on AKS clusters that have Istio installed on them already outside the add-on installation.
-  • Managed lifecycle of mesh on how Istio versions are installed and later made available for upgrades.
-  • Istio doesn't support Windows Server containers.
-  • Customization of mesh based on the following custom resources is blocked for now - EnvoyFilter, ProxyConfig, WorkloadEntry, WorkloadGroup, Telemetry, IstioOperator, WasmPlugin
+---
 
-How to deploy Istio-based service mesh add-on (PREVIEW)
-https://learn.microsoft.com/en-us/azure/aks/istio-deploy-addon
+## Difference Between Add-On and Open-Source Istio
+- **Compatibility:**
+  - Istio versions are tested and verified to be compatible with supported AKS versions.
+- **Managed Control Plane:**
+  - Microsoft handles scaling, configuration, and lifecycle management (upgrades) of the Istio control plane.
+- **Integrated Scaling:**
+  - AKS components like CoreDNS are automatically scaled when Istio is enabled.
+- **Ingress:**
+  - Verified external and internal ingress setups.
+- **Monitoring:**
+  - Compatible with Azure Monitor, Azure Managed Grafana, and Prometheus.
+- **Support:**
+  - Official Azure support is provided for the add-on.
 
-az extension add --name aks-preview
-az extension update --name aks-preview
-az feature register --namespace "Microsoft.ContainerService" --name "AzureServiceMeshPreview"
-az feature show --namespace "Microsoft.ContainerService" --name "AzureServiceMeshPreview"
-az provider register --namespace Microsoft.ContainerService
+### Limitations
+- The add-on is incompatible with:
+  - AKS clusters using the Open Service Mesh add-on.
+  - AKS clusters with Istio already installed outside the add-on.
+- **Windows Server Containers:**
+  - Not supported.
+- **Customization Restrictions:**
+  - Custom resources like `EnvoyFilter`, `ProxyConfig`, `WorkloadEntry`, `Telemetry`, and `IstioOperator` are currently blocked.
 
-Install Istio add-on at the time of cluster creation:
-az aks create … --enable-asm (--enable-azure-service-mesh)
+---
 
-Install Istio add-on for existing cluster:
-az aks mesh enable --resource-group ${RESOURCE_GROUP} --name ${CLUSTER}
-az aks show --resource-group ${RESOURCE_GROUP} --name ${CLUSTER}  --query 'serviceMeshProfile.mode'
+## Deploying the Istio-Based Service Mesh Add-On (Preview)
 
-Enable sidecar injection:
-kubectl label namespace default istio.io/rev=asm-1-17
-Manual: kubectl apply -f <(istioctl kube-inject -f sample.yaml -i aks-istio-system -r asm-1-17) -n foo
+### Step 1: Enable Required Features and Extensions
+1. Add and update the `aks-preview` extension:
+   ```bash
+   az extension add --name aks-preview
+   az extension update --name aks-preview
+   ```
+2. Register the Azure Service Mesh preview feature:
+   ```bash
+   az feature register --namespace "Microsoft.ContainerService" --name "AzureServiceMeshPreview"
+   az feature show --namespace "Microsoft.ContainerService" --name "AzureServiceMeshPreview"
+   ```
+3. Register the provider:
+   ```bash
+   az provider register --namespace Microsoft.ContainerService
+   ```
 
+---
+
+### Step 2: Install the Istio Add-On
+
+#### Option 1: At Cluster Creation
+- Enable Istio add-on during AKS cluster creation:
+  ```bash
+  az aks create ... --enable-asm
+  ```
+
+#### Option 2: For Existing Clusters
+- Enable Istio add-on for an existing AKS cluster:
+  ```bash
+  az aks mesh enable --resource-group ${RESOURCE_GROUP} --name ${CLUSTER}
+  ```
+- Verify the add-on installation:
+  ```bash
+  az aks show --resource-group ${RESOURCE_GROUP} --name ${CLUSTER} --query 'serviceMeshProfile.mode'
+  ```
+
+---
+
+### Step 3: Enable Sidecar Injection
+- Label namespaces to enable automatic sidecar injection:
+  ```bash
+  kubectl label namespace default istio.io/rev=asm-1-17
+  ```
+- Alternatively, manually inject the sidecar:
+  ```bash
+  kubectl apply -f <(istioctl kube-inject -f sample.yaml -i aks-istio-system -r asm-1-17) -n foo
+  ```
