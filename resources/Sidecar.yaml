@@ -8,6 +8,11 @@
 #   Outbound Traffic Control: Define which services or external destinations the sidecar proxy can communicate with.
 #   Ingress and Egress Traffic: Manage ingress (inbound) and egress (outbound) traffic for a specific pod, enabling fine-grained control over network policies.
 
+# - Manual Sidecar Injection: In manual sidecar injection, the Istio **Envoy proxy** sidecar is added to the Kubernetes pod using a command before deploying the application. This is done by modifying the pod's YAML configuration to include the sidecar container specification.
+# - Automatic Sidecar Injection: Automatic injection happens via Istio’s admission controller webhook. When enabled, every pod within a specific namespace (or with certain annotations) automatically gets the Envoy sidecar added to it upon deployment, without manually modifying the pod specification.
+#  Automatic injection can be enabled by labeling a namespace with `istio-injection=enabled` or pod with `sidecar.istio.io/inject="true"`.
+
+
 ---
 
 apiVersion: networking.istio.io/v1beta1
