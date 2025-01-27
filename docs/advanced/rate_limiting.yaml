@@ -1,5 +1,6 @@
 # RATE LIMITING
-# in Istio controls the rate at which requests are sent to a particular service, 
+
+# Controls the rate at which requests are sent to a particular service, 
 # helping to protect services from being overwhelmed by too many requests in short period of time.
 # By capping the number of request a service can handle, rate limiting ensures fair resource allocation and maintains service stability under load.
 
