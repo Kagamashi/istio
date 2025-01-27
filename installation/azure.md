@@ -1,4 +1,4 @@
-STIO-based SERVICE MESH ADD-ON
+ISTIO-based SERVICE MESH ADD-ON
 
 Difference between add-on and open-source Istio
   • Istio versions are tested and verified to be compatible with supported versions of Azure Kubernetes Service.
