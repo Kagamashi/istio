@@ -28,12 +28,6 @@
   istioctl analyze -n default  # Analyze for a specific namespace
   ```
 
-### Verify Installation
-- **Description:** Verifies whether Istio has been installed correctly by checking the state of Istio components and resources.
-- **Command:**
-  ```bash
-  istioctl verify-install
-  ```
 
 ---
 
@@ -66,38 +60,6 @@
 
 ---
 
-## Istio Installation and Lifecycle
-
-### Install Istio
-- **Description:** Installs Istio into a Kubernetes cluster.
-- **Command:**
-  ```bash
-  istioctl install --set profile=demo
-  ```
-
-### Upgrade Istio
-- **Description:** Upgrades Istio to a newer version.
-- **Command:**
-  ```bash
-  istioctl upgrade --set profile=default
-  ```
-
-### Generate Manifest
-- **Description:** Generates an Istio configuration manifest without applying it to the cluster.
-- **Command:**
-  ```bash
-  istioctl manifest generate --set profile=default
-  ```
-
-### Initialize Operator
-- **Description:** Initializes the Istio operator, responsible for managing the lifecycle of Istio installations.
-- **Command:**
-  ```bash
-  istioctl operator init
-  ```
-
----
-
 ## Traffic Management
 
 ### Inject Sidecar
@@ -126,48 +88,4 @@
 - **Command:**
   ```bash
   istioctl x route service my-service
-  ```
-
----
-
-## Profiles
-
-### Profile Dump
-- **Description:** Dumps the configuration of a specified Istio profile.
-- **Command:**
-  ```bash
-  istioctl profile dump demo
-  ```
-
-### Profile List
-- **Description:** Lists all available Istio profiles.
-- **Command:**
-  ```bash
-  istioctl profile list
-  ```
-
-### Profile Diff
-- **Description:** Compares two Istio installation profiles to show differences in configuration, useful for understanding how profiles like default, demo, and minimal differ.
-- **Command:**
-  ```bash
-  istioctl profile diff default minimal
-  ```
-
----
-
-## Security and Authorization
-
-### Mutual TLS Check
-- **Description:** Checks the mutual TLS (mTLS) status between two services or pods to identify security issues with service-to-service communication.
-- **Command:**
-  ```bash
-  istioctl authn tls-check <source-pod> <destination-pod> -n <namespace>
-  ```
-
-### Authorization Policy Analysis
-- **Description:** Analyzes authorization policies applied to a specific workload, showing requests that are allowed or denied based on the policies.
-- **Commands:**
-  ```bash
-  istioctl x authz check <pod-name> --namespace <namespace>
-  istioctl x authz list --workload <workload-name> --namespace <namespace>
   ```
