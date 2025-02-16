@@ -1,0 +1,16 @@
+
+# Istio supports JSON Web Token (JWT) authentication using RequestAuthentication policies, 
+# which allow workloads to verify JWTs issued by external identity providers.
+
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-auth
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: my-service # applies only to my-service workload in default namespace
+  jwtRules:
+    - issuer: "https://auth.example.com" # verifies JWTs issued by
+      jwksUri: "https://auth.example.com/.well-known/jwks.json" # uses JSON Web Key Set (JWKS) endpoint for token validation
