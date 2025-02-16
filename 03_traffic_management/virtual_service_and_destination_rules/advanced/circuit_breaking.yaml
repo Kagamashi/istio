@@ -22,3 +22,5 @@ spec:
       http:
         http1MaxPendingRequests: 100 # Max pending requests
         maxRequestsPerConnection: 10 # Max requests per connection
+
+---
