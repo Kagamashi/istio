@@ -1,7 +1,9 @@
+
 # AuthorizationPolicy
 
 # Key security feature in Istio that allows control access to services based on who is making the request and what actions they are trying to perform. 
 # It implements fine-grained, role-based access control (RBAC) for service-to-service and end-user-to-service communication.
+
 # With AuthorizationPolicies traffic can be allowd or denied based on:
 #   - service identities, 
 #   - namespaces, 
@@ -12,6 +14,11 @@
 #   - Restrict Access by JWT Role: You can enforce that only users with an admin role in their JWT claims can access certain paths of a service, such as /admin/*.
 #   - Service-to-Service Authorization: Restrict internal service communication to only specific service accounts or namespaces within the mesh, ensuring that only authorized services can access others.
 #   - Block Specific IP Ranges: Use the DENY action to block certain IP ranges from accessing services, adding an extra layer of security.
+
+# Policy applying scope:
+#   - Namespace-wide - all workloads in the namespace
+#   - Workload-specific - a single service/deployment
+#   - Mesh-wide - entire service mesh (when applied in istio-system)
 
 ---
 
@@ -68,87 +75,3 @@ spec:
 #   when: (Optional) Specifies additional conditions, such as JWT claims, request headers, or other request properties. For example, allowing access only to users with a certain role in the JWT.
 
 ---
-
-# ALLOW TRAFFIC ONLY FROM SPECIFIC SERVICE ACCOUNT
-# This policy allows traffic only from a specific Kubernetes service account (my-service-account) to the service running with the app: my-service label.
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: service-account-policy
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      app: my-service
-  action: ALLOW
-  rules:
-    - from:
-        - source:
-            principals:
-              - cluster.local/ns/default/sa/my-service-account
-
----
-
-# ALLOW ACCESS TO ADMIN PATHS FOR USERS WITH ADMIN ROLES
-# This policy allows users with an admin role in their JWT claim to access the /admin/* path.
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: admin-role-policy
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      app: my-service
-  action: ALLOW
-  rules:
-    - from:
-        - source:
-            requestPrincipals:
-              - "user@example.com"
-      to:
-        - operation:
-            methods:
-              - GET
-            paths:
-              - /admin/*
-      when:
-        - key: request.auth.claims[role]
-          values:
-            - admin
-
----
-
-# DENY TRAFFIC FROM SPECIFIC IP RANGE
-# This policy blocks all traffic from the IP range 10.0.0.0/16.
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: deny-ip-range
-  namespace: default
-spec:
-  action: DENY
-  rules:
-    - from:
-        - source:
-            ipBlocks:
-              - 10.0.0.0/16
-
----
-
-# DENY WORKLOADS IN NAMESPACE BAR TO POST
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: authdenypolicy
-  namespace: bookinfo 
-spec:
-  action: DENY
-  rules:
-    - from:
-        - source:
-          namespace: ["bar"]
-      to:
-        - operation:
-          methods: ["POST"]
-          
