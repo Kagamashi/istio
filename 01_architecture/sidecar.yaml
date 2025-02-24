@@ -12,7 +12,6 @@
 # - Automatic Sidecar Injection: Automatic injection happens via Istio’s admission controller webhook. When enabled, every pod within a specific namespace (or with certain annotations) automatically gets the Envoy sidecar added to it upon deployment, without manually modifying the pod specification.
 #  Automatic injection can be enabled by labeling a namespace with `istio-injection=enabled` or pod with `sidecar.istio.io/inject="true"`.
 
-
 ---
 
 apiVersion: networking.istio.io/v1beta1
